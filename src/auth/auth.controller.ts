@@ -3,6 +3,7 @@ import { UserRegistrationDto } from './dto/user-registration.dto';
 import { User } from '../users/entityes/user.entity';
 import { UserService } from '../users/user.service';
 
+
 @Controller('auth')
 export class AuthController {
     constructor(private readonly userService: UserService) {
@@ -19,10 +20,10 @@ export class AuthController {
         return this.userService.registration(data);
         
     };
+    
     @Post()
     async login(@Body() data: UserRegistrationDto): Promise<string> {
         const token = this.userService.login(data);
         return token;
     };
-
 };

@@ -5,5 +5,5 @@ export const generateAsccessToken = (id, role) => {
     id,
     role
     }   
-    return jwt.sign(payload, process.env.SECRET, {expiresIn: "24h"})
+    return jwt.sign(payload, process.env.SECRET, {expiresIn: "24h"});
 };

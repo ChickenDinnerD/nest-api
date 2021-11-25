@@ -7,7 +7,6 @@ import * as bcrypt from 'bcrypt';
 import { generateAsccessToken } from './utils/generate-jwt-token';
 
 
-
 @Injectable()
 export class UserService {
     
@@ -50,8 +49,3 @@ export class UserService {
         }        
     }
 };
-
-//     getUsers() {
-        
-//     }
-// }
