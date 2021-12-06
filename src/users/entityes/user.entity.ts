@@ -18,4 +18,4 @@ export class User {
 
     @CreateDateColumn({name: 'created_at'})
     createdAt: Date;
-};
+}

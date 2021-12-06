@@ -5,4 +5,4 @@ export class UserRegistrationDto{
     username: string
     @IsNotEmpty()
     password: string
-};
+}

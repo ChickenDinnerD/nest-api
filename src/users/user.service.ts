@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserRegistrationDto } from '../auth/dto/user-registration.dto';
@@ -12,14 +12,15 @@ export class UserService {
     
     constructor(
         @InjectRepository(User)
+        // eslint-disable-next-line no-unused-vars
         private usersRepository: Repository<User>
     ) {}
-    
+
     async registration(user: UserRegistrationDto): Promise<User> {
         try {
             const candidate = await this.usersRepository.find({where: {username: user.username}})
             if (candidate[0]) {
-                throw new Error("This name is already exist");
+                throw new HttpException('This name is already exist', HttpStatus.NOT_FOUND);
             }else {
                 const hashPass = await bcrypt.hash(user.password, 5);
                 user.password = hashPass
@@ -27,19 +28,20 @@ export class UserService {
                 return this.usersRepository.save(createdUser);
             }
         } catch (error) {
-            console.log(error); 
+            console.log(error);
         }  
-    };
+    }
 
     async login(user: UserRegistrationDto): Promise<string> {
         try {
             const validUser = await this.usersRepository.find({where: {username: user.username}});
             if (!validUser[0]) {
-                throw new Error("Invalid username");
+                const err = new NotFoundError('Invalid username', HttpStatus.NOT_FOUND);
+                return err
             }else {
                 const validPass = bcrypt.compareSync(user.password, validUser[0].password);
                 if (!validPass) {
-                    throw new Error("Invalid password");
+                    throw new HttpException('Invalid password', HttpStatus.NOT_FOUND);
                 }
                 const token = generateAsccessToken(validUser[0].id, validUser[0].currentRole);
                 return token;   
@@ -48,4 +50,4 @@ export class UserService {
             console.log(error);
         }        
     }
-};
+}

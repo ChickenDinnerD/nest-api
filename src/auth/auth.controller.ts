@@ -6,24 +6,25 @@ import { UserService } from '../users/user.service';
 
 @Controller('auth')
 export class AuthController {
+    // eslint-disable-next-line no-unused-vars
     constructor(private readonly userService: UserService) {
     }
 
     @Get()
     getAll(): string {
         return 'getAll'
-    };
+    }
 
     @Post("/registration")
     @HttpCode(HttpStatus.CREATED)
     async regestration(@Body() data: UserRegistrationDto): Promise<User>  {
         return this.userService.registration(data);
         
-    };
+    }
     
     @Post()
     async login(@Body() data: UserRegistrationDto): Promise<string> {
         const token = this.userService.login(data);
         return token;
-    };
-};
+    }
+}
