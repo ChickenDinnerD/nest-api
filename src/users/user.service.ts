@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, NotFoundException, HttpStatus, Injectable, ForbiddenException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserRegistrationDto } from '../auth/dto/user-registration.dto';
@@ -20,7 +20,7 @@ export class UserService {
         try {
             const candidate = await this.usersRepository.find({where: {username: user.username}})
             if (candidate[0]) {
-                throw new HttpException('This name is already exist', HttpStatus.NOT_FOUND);
+                throw new ForbiddenException('This name is already exist');
             }else {
                 const hashPass = await bcrypt.hash(user.password, 5);
                 user.password = hashPass
@@ -29,6 +29,7 @@ export class UserService {
             }
         } catch (error) {
             console.log(error);
+            throw new HttpException(error.response.message, error.status)
         }  
     }
 
@@ -36,18 +37,18 @@ export class UserService {
         try {
             const validUser = await this.usersRepository.find({where: {username: user.username}});
             if (!validUser[0]) {
-                const err = new NotFoundError('Invalid username', HttpStatus.NOT_FOUND);
-                return err
+                throw new NotFoundException('Invalid username');
             }else {
                 const validPass = bcrypt.compareSync(user.password, validUser[0].password);
                 if (!validPass) {
-                    throw new HttpException('Invalid password', HttpStatus.NOT_FOUND);
+                    throw new NotFoundException('Invalid password');
                 }
                 const token = generateAsccessToken(validUser[0].id, validUser[0].currentRole);
                 return token;   
             }
-        }catch (error) {
-            console.log(error);
+        } catch (error: any) {
+            console.debug(error);
+            throw new HttpException(error.response.message, error.status)
         }        
     }
 }

@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
-import { UserModule } from './users/user.module';
+import { UserModule } from './users/users.module';
 import { PostgresConfigService } from './config/config-service';
+import { AuthController } from './auth/auth.controller';
+import { AuthModule } from './auth/auth.module';
 
 
 @Module({
   imports: [
     AuthModule,
-    UserModule,
     ConfigModule.forRoot({isGlobal: true}),
     TypeOrmModule.forRootAsync({
       useClass: PostgresConfigService,

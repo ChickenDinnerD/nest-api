@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 export = {  "type": "postgres",
-"host": "localhost",
+"host": "postgres",
 "port": +process.env.PORT,
 "username": process.env.DB_USER,
 "password": process.env.PASSWORD,
