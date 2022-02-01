@@ -1,19 +1,12 @@
-import { Controller, Get, HttpCode, HttpStatus, Post, Body, UseFilters } from '@nestjs/common';
+import { Controller, HttpCode, HttpStatus, Post, Body } from '@nestjs/common';
 import { UserRegistrationDto } from './dto/user-registration.dto';
 import { User } from '../users/entityes/user.entity';
 import { UserService } from 'src/users/user.service';
-import { HttpExceptionFilter } from 'src/middlewares/http-exception.filter';
 
-
-@Controller('auth')
+@Controller("auth")
 export class AuthController {
     // eslint-disable-next-line no-unused-vars
     constructor(private readonly userService: UserService) {
-    }
-
-    @Get()
-    getAll(): string {
-        return 'getAll'
     }
 
     @Post("registration")

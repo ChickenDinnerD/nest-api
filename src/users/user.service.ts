@@ -1,11 +1,10 @@
-import { HttpException, NotFoundException, HttpStatus, Injectable, ForbiddenException } from '@nestjs/common';
+import { HttpException, NotFoundException, Injectable, ForbiddenException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserRegistrationDto } from '../auth/dto/user-registration.dto';
 import { User } from './entityes/user.entity';
 import * as bcrypt from 'bcrypt';
 import { generateAsccessToken } from './utils/generate-jwt-token';
-
 
 @Injectable()
 export class UserService {
@@ -28,7 +27,6 @@ export class UserService {
                 return this.usersRepository.save(createdUser);
             }
         } catch (error) {
-            console.log(error);
             throw new HttpException(error.response.message, error.status)
         }  
     }
@@ -46,9 +44,8 @@ export class UserService {
                 const token = generateAsccessToken(validUser[0].id, validUser[0].currentRole);
                 return token;   
             }
-        } catch (error: any) {
-            console.debug(error);
-            throw new HttpException(error.response.message, error.status)
+        } catch (error) {
+            throw new HttpException(error.response.message, error.status);
         }        
     }
 }
